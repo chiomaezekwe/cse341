@@ -9,7 +9,7 @@ const options = {
       version: '1.0.0',
     },
     servers: [
-      { url: 'http://localhost:3000' }
+      { url: 'https://cse341-tastetrack-api.onrender.com' }  //http://localhost:3000'
     ],
 
     components: {

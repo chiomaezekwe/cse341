@@ -8,6 +8,7 @@ exports.getAllComments = async (req, res) => {
       .populate('userId', 'name');
     res.json(comments);
   } catch (err) {
+    //console.error('Error fetching comments:', err); // for debugging 
     res.status(500).json({ error: err.message });
   }
 };

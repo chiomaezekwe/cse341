@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "test1": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
@@ -29,5 +30,9 @@
     "jest": "^30.2.0",
     "nodemon": "^3.1.10",
     "supertest": "^7.1.4"
-  }
+  },
+  "jest": {
+  "testTimeout": 20000,
+  "setupFilesAfterEnv": ["<rootDir>/test/setup.js"]
+}
 }

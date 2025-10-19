@@ -8,6 +8,7 @@ exports.getAllUsers = async (req, res) => {
     const users = await User.find();
     res.json(users);
   } catch (err) {
+    // //console.error('Error fetching reviews:', err);  // for debugging
     res.status(500).json({ error: err.message });
   }
 };

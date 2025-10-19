@@ -6,6 +6,7 @@ exports.getAllDishes = async (req, res) => {
     const dishes = await Dish.find().populate('restaurantId', 'name');
     res.json(dishes);
   } catch (err) {
+    //console.error('Error fetching dishes:', err); // for debugging
     res.status(500).json({ error: err.message });
   }
 };

@@ -6,6 +6,7 @@ exports.getAllRestaurants = async (req, res) => {
     const restaurants = await Restaurant.find();
     res.json(restaurants);
   } catch (err) {
+    //console.error('Error fetching restaurants:', err); // for debugging 
     res.status(500).json({ error: err.message });
   }
 };

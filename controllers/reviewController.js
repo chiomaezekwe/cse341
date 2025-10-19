@@ -8,6 +8,7 @@ exports.getAllReviews = async (req, res) => {
       .populate('userId', 'name');
     res.json(reviews);
   } catch (err) {
+    //console.error('Error fetching reviews:', err);  // for debugging
     res.status(500).json({ error: err.message });
   }
 };

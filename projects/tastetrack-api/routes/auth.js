@@ -10,7 +10,7 @@ router.get('/github', passport.authenticate('github', { scope: ['user:email'] })
 router.get('/github/callback',
   passport.authenticate('github', { failureRedirect: '/api/auth/failure' }),
   (req, res) => {
-    res.send(`🎉 Logged in as ${req.user.name}`);
+    res.send(`Logged in as ${req.user.name}`);
   }
 );
 

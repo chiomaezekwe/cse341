@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: 6,
-    select: false // Do not return password by default
+    select: false // Will not return password by default
   }
 });
 

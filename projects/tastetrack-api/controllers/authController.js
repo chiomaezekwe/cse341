@@ -2,13 +2,15 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 
-const createToken = (userId) => {
-  return jwt.sign({ id: userId }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN
-  });
+const createToken = (user) => {
+  return jwt.sign(
+    { id: user._id, isAdmin: user.isAdmin },
+    process.env.JWT_SECRET,
+    { expiresIn: process.env.JWT_EXPIRES_IN }
+  );
 };
 
-// 📌 POST /api/auth/register
+// POST /api/auth/register
 exports.register = async (req, res, next) => {
   try {
     const { name, email, password, location } = req.body;
@@ -18,14 +20,14 @@ exports.register = async (req, res, next) => {
 
     const user = await User.create({ name, email, password, location });
 
-    const token = createToken(user._id);
+    const token = createToken(user);
     res.status(201).json({ token, user: { id: user._id, name: user.name, email: user.email } });
   } catch (err) {
     next(err);
   }
 };
 
-// 📌 POST /api/auth/login
+// POST /api/auth/login
 exports.login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -35,7 +37,7 @@ exports.login = async (req, res, next) => {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
-    const token = createToken(user._id);
+    const token = createToken(user);
     res.json({ token, user: { id: user._id, name: user.name, email: user.email } });
   } catch (err) {
     next(err);

@@ -23,17 +23,6 @@ exports.getUserById = async (req, res) => {
   }
 };
 
-// POST create user
-/*exports.createUser = async (req, res) => {
-  try {
-    const newUser = new User(req.body);
-    const savedUser = await newUser.save();
-    res.status(201).json(savedUser);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-};*/
-
 // PUT update user
 exports.updateUser = async (req, res) => {
   try {
@@ -62,7 +51,6 @@ exports.loginUser = async (req, res) => {
 
   try {
     // Check if user exists
-    //const user = await User.findOne({ email });
     const user = await User.findOne({ email }).select('+password');
     console.log('Found user:', user);
 
@@ -75,7 +63,7 @@ exports.loginUser = async (req, res) => {
     if (!isMatch) return res.status(401).json({ message: 'Invalid credentials' });
 
     // Generate token
-    const token = generateToken(user._id);
+    const token = generateToken(user);
 
     // Respond with token
     res.status(200).json({
@@ -97,56 +85,13 @@ exports.createUser = async (req, res) => {
   const { name, email, password, avatar, location } = req.body;
 
   try {
-    // ✅ Check if user already exists
+    // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: 'User already exists' });
     }
 
-    // ✅ Create new user (password hashing happens in model pre-save hook)
-    const newUser = new User({
-      name,
-      email,
-      password,
-      avatar,
-      location
-    });
-
-    const savedUser = await newUser.save();
-
-    // ✅ Generate JWT token
-    const token = generateToken(savedUser._id);
-
-    res.status(201).json({
-      message: 'User created successfully',
-      token,
-      user: {
-        id: savedUser._id,
-        name: savedUser.name,
-        email: savedUser.email
-      }
-    });
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
-};
-
-
-
-
-/*
-// POST create user (signup)
-exports.createUser = async (req, res) => {
-  const { name, email, password, avatar, location } = req.body;
-
-  try {
-    // Check if user already exists
-    const user = await User.findOne({ email }).select('+password');
-    if (existingUser) {
-      return res.status(400).json({ message: 'User already exists' });
-    }
-
-    // Create new user (let Mongoose pre-save hook hash the password)
+    // Create new user (password hashing happens in model pre-save hook)
     const newUser = new User({
       name,
       email,
@@ -172,53 +117,4 @@ exports.createUser = async (req, res) => {
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
-};*/
-
-
-/*
-// POST create user (signup)
-exports.createUser = async (req, res) => {
-  const { name, email, password, avatar, location, isAdmin } = req.body;
-
-  try {
-    // Check if user already exists
-    const user = await User.findOne({ email }).select('+password');
-    if (existingUser) {
-      return res.status(400).json({ message: 'User already exists' });
-    }
-
-    // Hash the password properly
-    const salt = await bcrypt.genSalt(12);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    // Create new user using the hashed password
-    const newUser = new User({
-      name,
-      email,
-      password,
-      avatar,
-      location,
-      isAdmin: isAdmin || false  // Optional: only allow this during development
-    });
-
-    const savedUser = await newUser.save();
-
-    // Generate JWT token
-    const token = generateToken(savedUser._id);
-
-    res.status(201).json({
-      message: 'User created successfully',
-      token,
-      user: {
-        id: savedUser._id,
-        name: savedUser.name,
-        email: savedUser.email,
-        isAdmin: savedUser.isAdmin,
-      }
-    });
-
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
 };
-*/
